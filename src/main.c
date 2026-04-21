@@ -1,4 +1,4 @@
-#include<debloat.h>
+#include"debloat.h"
 
 /* TODO
  * hmm, check adb is installed or not if not install it ( create exe_finder  
@@ -8,7 +8,7 @@
 
 int main (void) {
 
-	
+
 
 
 	return 0;

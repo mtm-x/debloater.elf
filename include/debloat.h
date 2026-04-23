@@ -1,5 +1,5 @@
 #ifndef _BLOAT_H
-#define _BLAOT_H
+#define _BLOAT_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,7 +9,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
+#include <errno.h>
 
 // ANSI Color Codes
 #define RED   "\x1B[31m"
@@ -21,5 +21,8 @@
 #define WHT   "\x1B[37m"
 #define RESET "\x1B[0m"
 	
+#define ADB "adb"
+#define nulptr (void *)0
+#define c_nulptr (char *)0
 
 #endif

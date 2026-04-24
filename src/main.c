@@ -9,7 +9,7 @@
 
 int main (void) {
 	
-	int ret = check_adb_installed();
+	unsigned char ret = check_adb_installed();
 	if ( ret != EXIT_SUCCESS ){
 		return -1;
 	}

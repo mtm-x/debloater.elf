@@ -27,6 +27,7 @@ obj/%.o: src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 git:
+	rm -rf obj bin
 	git add .
 	git commit -s -m "$(commit)"
 	git push

@@ -7,10 +7,23 @@
 
 static void remove_package(char *pkg_name){
 	*(pkg_name+(strlen(pkg_name)-1)) = '\0';
-	printf("%s \n", pkg_name);
-	char *command[] = {ADB, "shell", "pm", "uninstall", "--user", "0", pkg_name, NULL};
-	int ret = execvp_handler(command, false);
-	printf("%d \n", ret);
+	unsigned char option = 0;
+	printf(" \"%s\" will be deleted!! Are you sure? (Y/N): ", pkg_name);
+	scanf(" %c", &option);
+
+	if(option == 'y' || option == 'Y') {
+		char *command[] = {ADB, "shell", "pm", "uninstall", "--user", "0", pkg_name, NULL};
+		int ret = execvp_handler(ADB, command, false);
+	}
+	else {
+		printf("Bye...\n");
+	}
+
+	free(pkg_name-8); 
+	/* 
+	 * since i sent the pointer to the 8th char coz i dont want to add
+	 * package: with the adb command 
+	 */
 }	
 
 void list_packages() {
@@ -25,14 +38,15 @@ void list_packages() {
 		printf("malloc allocation failed %p", package_name);
 		return;
 	}
-	char **package_list = malloc(2048); /* i seriously dont know */
+	char **package_list = malloc(8*1024); /* i seriously dont know the size*/
 	if(package_list == nulptr) {
 		printf("malloc allocation failed %p", package_list);
 		return;
 	}
 
 	printf("Enter the application name or better full package name: ");
-	scanf("%s", package_name); // need to check whether it is a name or not 
+	scanf("%s", package_name);  
+	
 
 	FILE *stream = popen("adb shell pm list packages", "r");
 	if (stream == nulptr) {
@@ -64,13 +78,34 @@ void list_packages() {
 		for ( unsigned int count = 0; count < package_name_count; count++){
 			printf("%d: %s", count, *(package_list+count));
 		}
-		printf("Choose the right package: ");
+		printf("Choose the right package (enter a digit): ");
 		scanf("%d", &right_pkg_number); //need to check if it is a number or not 
+		if(right_pkg_number > package_name_count) {
+			printf("Dude.. Enter the valid number \n");
+			/* hmmm now what to do the program gonna start from the beginning not so good */
+			return;
+		}
 		printf("You selected: %s \n", *(package_list + right_pkg_number));
 		remove_package(*(package_list + right_pkg_number)+8);
 	}
+
+	else if (package_name_count == 1) {
+		printf("You selected: %s \n", *(package_list));
+		remove_package(*(package_list)+8);
+
+	}
+
+	else {
+		printf("Hmm.. No valide package found for your input \"%s\" \n", package_name);
+	}
 	// need to free a lot of things
 	free(buffer);
+	free(package_name);
+	for(unsigned int count = 0; count < package_name_count; count++){
+		if(count == right_pkg_number) continue;
+		free(*(package_list+count));
+	}
+	free(package_list);
 	pclose(stream);
 }
 
@@ -109,4 +144,4 @@ unsigned char check_adb_installed() {
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
-}
+ }

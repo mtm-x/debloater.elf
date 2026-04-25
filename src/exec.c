@@ -65,7 +65,7 @@ unsigned char execlp_handler(const char *arg1, const char *arg2, bool REDIRECT) 
 	}
 }
 
-unsigned char execvp_handler(char *arg[], bool REDIRECT) { /* char const *arg[] ? */
+unsigned char execvp_handler(char *cmd, char *arg[], bool REDIRECT) { /* char const *arg[] ? */
 	pid_t pid;
 	pid = fork();
 	if(pid == -1) {
@@ -74,7 +74,7 @@ unsigned char execvp_handler(char *arg[], bool REDIRECT) { /* char const *arg[] 
 	}
 	if(pid == 0) {
 		if(REDIRECT) redirect_to_dev_null();
-		execvp(ADB, arg); 
+		execvp(cmd, arg); 
 		exit(ENOENT);	
 	}
 	else {

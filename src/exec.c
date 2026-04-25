@@ -4,7 +4,6 @@
 
 #include"debloat.h"
 
-
 /* 
  * int execvp(const char *filename, char *const argv[]); 
  * should i use const char *command ? yeah
@@ -15,10 +14,9 @@ static void redirect_to_dev_null() {
 	/*
 	 * To prevent the child process's output from printing to the shell, you need to redirect its standard output
          * and standard error (stderr) to /dev/null using the dup2() system call before calling execvp()
-         */
+         * returns file descritor a unique number for opened file or -1 
+	 */
 
-			
-	 /*returns file descritor a unique number for opened file or -1 */
 	int dev_null_fd = open("/dev/null", O_WRONLY); 
 	
 	if (dev_null_fd == -1) {
@@ -69,16 +67,12 @@ unsigned char execlp_handler(const char *arg1, const char *arg2, bool REDIRECT) 
 		 */
 
 		exit(ENOENT);	
-		//perror("execvp");
 	}
-
-
 	else {
 		/* 
 		 * idk 
 		 * pid_t waitpid(pid_t pid, int *status, int options);
 		 */
-
 		int status;
 		waitpid(pid, &status, 0);
 		return WEXITSTATUS(status);
@@ -101,13 +95,7 @@ unsigned char execvp_handler(char *arg[], bool REDIRECT) { /* char const *arg[] 
 		exit(ENOENT);	
 	}
 
-
 	else {
-		/* 
-		 * idk 
-		 * pid_t waitpid(pid_t pid, int *status, int options);
-		 */
-
 		int status;
 		waitpid(pid, &status, 0);
 		return WEXITSTATUS(status);

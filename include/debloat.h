@@ -24,5 +24,5 @@
 #define ADB "adb"
 #define nulptr (void *)0
 #define c_nulptr (char *)0
-
+#define MAX_PACKAGE_NAME_LEN 50
 #endif

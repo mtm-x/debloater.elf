@@ -14,13 +14,12 @@ static void remove_package(char *pkg_name){
 }	
 
 void list_packages() {
+
 	char *buffer = malloc(MAX_PACKAGE_NAME_LEN);
-	
 	if(buffer == nulptr) {
 		printf("malloc allocation failed %p", buffer);
 		return;
 	}
-
 	char *package_name = malloc(MAX_PACKAGE_NAME_LEN);
 	if(package_name == nulptr) {
 		printf("malloc allocation failed %p", package_name);
@@ -44,14 +43,12 @@ void list_packages() {
 	unsigned int package_name_count = 0;
 	while(fgets(buffer, 50, stream) != NULL) {
 		if(strstr(buffer, package_name)) {
-		
 		/* 
 		 * *(package_list+i) = buffer; 
 		 * using above is problematic since every iteration new pkg names are
 		 * written in the same 0x1000 memory location so after the loop 
 		 * package_list = 0x1000 but it have the last package name 
 		 */
-			
 			*(package_list+package_name_count ) = strdup(buffer); 
 			/* 
 			 * pkg name is duplicated to 0x2000
@@ -72,7 +69,6 @@ void list_packages() {
 		printf("You selected: %s \n", *(package_list + right_pkg_number));
 		remove_package(*(package_list + right_pkg_number)+8);
 	}
-
 	// need to free a lot of things
 	free(buffer);
 	pclose(stream);
@@ -80,20 +76,16 @@ void list_packages() {
 
 unsigned char check_device_connected() {
 	/* No need for this type of implementation tbh */
-
 	char **command = malloc(1*sizeof(char *));
-
 	if (command == nulptr) {
 		printf("malloc allocation failed %p", command);
 		return ENOMEM;
 	}
-
 	*command = malloc(strlen("adb devices")+1);
 	if (*command == nulptr) {
 		printf("malloc allocation failed %p", *command);
 		return ENOMEM;
 	}
-
 	strcpy(*command, "adb devices");
 	unsigned char ret = execlp_handler(*command, *command+4, false);
 	if (ret != EXIT_SUCCESS){
@@ -102,12 +94,10 @@ unsigned char check_device_connected() {
 	// need to free mallocs
 	free(*command);
 	free(command);
-	
 	/* TODO
 	 * need to check whether device is connected or not :)
 	 * on the assumption of it is connected moving to packages 
 	 */
-	
 	return EXIT_SUCCESS;
 }
 
@@ -115,11 +105,8 @@ unsigned char check_adb_installed() {
 	unsigned char status_exec = execlp_handler("", "", true);
 	if (status_exec == ENOENT) {
 		printf("Dang!! adb is not installed \n");
-			
 		//temp return but call for installation handler
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
 }
-
-

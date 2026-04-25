@@ -6,10 +6,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <string.h>
-#include <dirent.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <errno.h>
+#include <sys/stat.h>
 
 // ANSI Color Codes
 #define RED   "\x1B[31m"
